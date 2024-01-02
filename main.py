@@ -23,9 +23,15 @@ class Student:
                 f"Средняя оценка за домашние задания: {self._average_rating}"
                 f"Курсы в процессе изучения: {', '.join(self.courses_in_progress)}"
                 f"Завершенные курсы: {', '.join(self.finished_courses)}")
-    def __lt__(self, other):
-        min_rating = self._average_rating(other)
+    def __lt__(self, student):
+        min_rating = self._average_rating
         return self._average_rating < min_rating
+
+    def stud_vs_stud(self, student, course):
+        for grade in student.grades:
+            self.grades[course] += student.grades[course]
+            self.grades[course] /= len(student.grades[course])
+        return self.grades[course]
 
 class Mentor:
     def __init__(self, name, surname):
@@ -46,9 +52,15 @@ class Lecturer(Mentor):
                 f"Фамилия: {self.surname}"
                 f"Средняя оценка за лекции: {self._average_rating}")
 
-    def __lt__(self, other):
-        min_rating = self._average_rating(other)
+    def __lt__(self, lecturer):
+        min_rating = self._average_rating
         return self._average_rating < min_rating
+
+    def lec_vs_lec(self, lecturer, course):
+        for grade in lecturer.grades:
+            self.grades[course] += lecturer.grades[course]
+            self.grades[course] /= len(lecturer.grades[course])
+        return self.grades[course]
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
