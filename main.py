@@ -6,6 +6,7 @@ class Student:
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
+        self._average_rating = sum(self.grades) / len(self.grades)
 
     def rate_Lecturer(self, lecturer, course, grade_Lecturer):
         if isinstance(lecturer, Lecturer) and course in self.courses_attached and course in student.courses_in_progress:
@@ -15,6 +16,16 @@ class Student:
                 lecturer.grades[course] = [grade_Lecturer]
         else:
             return 'Ошибка'
+
+    def __str__(self):
+        print(f"Имя: {self.name} "
+                f"Фамилия: {self.surname}"
+                f"Средняя оценка за домашние задания: {self._average_rating}"
+                f"Курсы в процессе изучения: {', '.join(self.courses_in_progress)}"
+                f"Завершенные курсы: {', '.join(self.finished_courses)}")
+    def __lt__(self, other):
+        min_rating = self._average_rating(other)
+        return self._average_rating < min_rating
 
 class Mentor:
     def __init__(self, name, surname):
@@ -27,11 +38,26 @@ class Lecturer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
         self.grades_Lecturer = {}
+        self._average_rating = sum(self.grades_Lecturer) / len(self.grades_Lecturer)
 
+
+    def __str__(self):
+        print(f"Имя: {self.name} "
+                f"Фамилия: {self.surname}"
+                f"Средняя оценка за лекции: {self._average_rating}")
+
+    def __lt__(self, other):
+        min_rating = self._average_rating(other)
+        return self._average_rating < min_rating
 
 class Reviewer(Mentor):
     def __init__(self, name, surname):
         super().__init__(name, surname)
+
+    def __str__(self):
+        print(f"Имя: {self.name} "
+                f"Фамилия: {self.surname}")
+
 
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
