@@ -9,7 +9,7 @@ class Student:
         self._average_rating = sum(self.grades) / len(self.grades)
 
     def rate_Lecturer(self, lecturer, course, grade_Lecturer):
-        if isinstance(lecturer, Lecturer) and course in self.courses_attached and course in student.courses_in_progress:
+        if isinstance(lecturer, Lecturer) and course in self.courses_attached and course in lecturer.courses_in_progress:
             if course in lecturer.grades:
                 lecturer.grades[course] += [grade_Lecturer]
             else:
@@ -28,6 +28,14 @@ class Student:
         return self._average_rating < min_rating
 
     def stud_vs_stud(self, student, course):
+        for grade in student.grades:
+            self.grades[course] += student.grades[course]
+            self.grades[course] /= len(student.grades[course])
+        return self.grades[course]
+
+
+    def average_rating_stud(self,student, course):
+        student = [student]
         for grade in student.grades:
             self.grades[course] += student.grades[course]
             self.grades[course] /= len(student.grades[course])
@@ -57,6 +65,13 @@ class Lecturer(Mentor):
         return self._average_rating < min_rating
 
     def lec_vs_lec(self, lecturer, course):
+        for grade in lecturer.grades:
+            self.grades[course] += lecturer.grades[course]
+            self.grades[course] /= len(lecturer.grades[course])
+        return self.grades[course]
+
+    def average_rating_lec(self, lecturer, course):
+        lecturer = [lecturer]
         for grade in lecturer.grades:
             self.grades[course] += lecturer.grades[course]
             self.grades[course] /= len(lecturer.grades[course])
@@ -92,3 +107,40 @@ cool_mentor.rate_hw(best_student, 'Python', 10)
 cool_mentor.rate_hw(best_student, 'Python', 10)
 
 print(best_student.grades)
+
+
+Student1 = Student('Natliya','Natalina','woman')
+Student1.courses_in_progress = ['Python' , 'Git']
+Student1.finished_courses = ['Java']
+Student1.rate_Lecturer(Lecturer, 'Python', 10)
+Student1.stud_vs_stud(Student, 'Python')
+
+Student2 = Student('Ivan','Ivanov','man')
+Student2.courses_in_progress = ['Python']
+Student2.finished_courses = ['Java']
+Student2.rate_Lecturer(Lecturer, 'Python', 9)
+Student2.stud_vs_stud(Student1, 'Python')
+
+Mentor1 = Mentor('Oleg', 'Olegov')
+Mentor1.courses_attached = ['Python']
+
+Mentor2 = Mentor('Alex', 'Alexeiev')
+Mentor2.courses_attached = ['Python']
+
+Lecturer1 = Lecturer('Oleg', 'Olegov')
+Lecturer1.courses_attached = ['Python']
+Lecturer1.lec_vs_lec(Lecturer, 'Python')
+
+Lecturer2 = Lecturer('Alex', 'Alexeiev')
+Lecturer2.courses_attached = ['Python']
+Lecturer2.lec_vs_lec(Lecturer1, 'Python')
+
+Reviewer1 = Reviewer('Petr', 'Petrov')
+Reviewer1.courses_attached = ['Python']
+Reviewer1.rate_hw(Student1, 'Python', 10)
+Reviewer1.rate_hw(Student2, 'Python', 10)
+
+Reviewer2 = Reviewer('Sidor', 'Sidorov')
+Reviewer2.courses_attached = ['Python']
+Reviewer2.rate_hw(Student1, 'Python', 9)
+Reviewer2.rate_hw(Student2, 'Python', 9)
